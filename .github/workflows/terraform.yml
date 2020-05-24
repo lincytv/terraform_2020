@@ -1,0 +1,23 @@
+name: creating vpc terraform
+
+on:
+  pull_request:
+  push:
+    - master
+    - dev
+    - stage
+jobs:
+  test:
+    name: Running Unit test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: action/checkout@v1
+      - name: Use Terraform ${{ matrix.terraform-version }}
+        uses: actions/setup-terrafrom@v1
+        with:
+          terrafrom-version:  ${{ matrix.terraform-version }}
+      - name: Install
+        run: apt install terraform
+      - name: Plan
+        run: terraform plan
