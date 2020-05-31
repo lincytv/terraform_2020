@@ -1,10 +1,9 @@
-ame: Terraform
+name: Terraform
 on:
   pull_request:	
   push:	
-    - master	
-    - dev	
-    - stage
+    branches:
+      - master
 
 jobs:
   on-pull-request:
