@@ -1,5 +1,10 @@
 ame: Terraform
-on: [pull_request]
+on:
+  pull_request:	
+  push:	
+    - master	
+    - dev	
+    - stage
 
 jobs:
   on-pull-request:
