@@ -1,23 +1,39 @@
-name: creating vpc terraform
+ame: Terraform
+on: [pull_request]
 
-on:
-  pull_request:
-  push:
-    - master
-    - dev
-    - stage
 jobs:
-  test:
-    name: Running Unit test
+  on-pull-request:
+    name: On Pull Request
     runs-on: ubuntu-latest
-
     steps:
-      - uses: action/checkout@v1
-      - name: Use Terraform ${{ matrix.terraform-version }}
-        uses: actions/setup-terrafrom@v1
-        with:
-          terrafrom-version:  ${{ matrix.terraform-version }}
-      - name: Install
-        run: apt install terraform
-      - name: Plan
-        run: terraform plan
+    - name: Checkout Repo
+      uses: actions/checkout@v1
+      
+    - name: Filter to PR Opened
+      uses: actions/bin/filter@master
+      with:
+        args: "action 'opened|rerequested|synchronize'"
+            
+    - name: Terraform Init
+      uses: hashicorp/terraform-github-actions/init@v0.4.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TF_ACTION_WORKING_DIR: '.'
+        AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        
+    - name: Terraform Validate
+      uses: hashicorp/terraform-github-actions/validate@v0.4.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TF_ACTION_WORKING_DIR: '.'
+        AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        
+    - name: Terraform Plan
+      uses: hashicorp/terraform-github-actions/plan@v0.4.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TF_ACTION_WORKING_DIR: '.'
+        AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
